@@ -20,6 +20,7 @@
  * @package    theme_more
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Jago Brown <jago@active-studio.com>
  */
 
 /**
@@ -103,6 +104,10 @@ function theme_littlemore_process_css($css, $theme) {
     // Set the background image for the logo.
     $logo = $theme->setting_file_url('logo', 'logo');
     $css = theme_littlemore_set_logo($css, $logo);
+    
+    // Set the background image for the brand in top nav.
+    $brand = $theme->setting_file_url('brand', 'brand');
+    $css = theme_littlemore_set_brand($css, $brand );
 
     // Set custom CSS.
     if (!empty($theme->settings->customcss)) {
@@ -135,6 +140,25 @@ function theme_littlemore_set_logo($css, $logo) {
 }
 
 /**
+ * Adds the brand to CSS. Added by jago
+ *
+ * @param string $css The CSS.
+ * @param string $logo The URL of the logo.
+ * @return string The parsed CSS
+ */
+function theme_littlemore_set_brand($css, $brand) {
+	$tag = '[[setting:brand]]';
+	$replacement = $brand;
+	if (is_null($replacement)) {
+		$replacement = '';
+	}
+
+	$css = str_replace($tag, $replacement, $css);
+
+	return $css;
+}
+
+/**
  * Serves any files associated with the theme settings.
  *
  * @param stdClass $course
@@ -147,7 +171,7 @@ function theme_littlemore_set_logo($css, $logo) {
  * @return bool
  */
 function theme_littlemore_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    if ($context->contextlevel == CONTEXT_SYSTEM && ($filearea === 'logo' || $filearea === 'backgroundimage')) {
+    if ($context->contextlevel == CONTEXT_SYSTEM && ($filearea === 'logo' || $filearea === 'backgroundimage' || $filearea === 'brand')) { //Jago added new filearea
         $theme = theme_config::load('littlemore');
         return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
     } else {
@@ -172,4 +196,47 @@ function theme_littlemore_set_customcss($css, $customcss) {
     $css = str_replace($tag, $replacement, $css);
 
     return $css;
+}
+
+/**
+ * Returns an object containing HTML for the areas affected by settings.
+ *
+ * Do not add Clean specific logic in here, child themes should be able to
+ * rely on that function just by declaring settings with similar names.
+ *
+ * @param renderer_base $output Pass in $OUTPUT.
+ * @param moodle_page $page Pass in $PAGE.
+ * @return stdClass An object with the following properties:
+ *      - navbarclass A CSS class to use on the navbar. By default ''.
+ *      - heading HTML to use for the heading. A logo if one is selected or the default heading.
+ *      - footnote HTML to use as a footnote. By default ''.
+ */
+function theme_littlemore_get_html_for_settings(renderer_base $output, moodle_page $page) {
+	global $CFG;
+	$return = new stdClass;
+
+	$return->navbarclass = '';
+	if (!empty($page->theme->settings->invert)) {
+		$return->navbarclass .= ' navbar-inverse';
+	}
+	
+	if (!empty($page->theme->settings->brand)) {//added
+		$return->brandhome = html_writer::link($CFG->wwwroot.'/user/profile.php', '', array('title' => get_string('brandhome','theme_littlemore'), 'class' => 'brand', 'id' => 'brandimgset'));
+	} else {//when no image is set in theme
+		//$return->brandhome = $output->page_heading(); this increased depth of nav bar becuase it forces down user logout block
+		$return->brandhome = html_writer::link($CFG->wwwroot.'/user/profile.php', get_string('brandhometext','theme_littlemore'), array('title' => get_string('brandhome','theme_littlemore'), 'class' => 'brand'));
+	}
+
+	if (!empty($page->theme->settings->logo)) {
+		$return->heading = html_writer::link($CFG->wwwroot, '', array('title' => get_string('home'), 'class' => 'logo'));
+	} else {
+		$return->heading = $output->page_heading();
+	}
+
+	$return->footnote = '';
+	if (!empty($page->theme->settings->footnote)) {
+		$return->footnote = '<div class="footnote text-center">'.$page->theme->settings->footnote.'</div>';
+	}
+
+	return $return;
 }

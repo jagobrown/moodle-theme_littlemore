@@ -20,11 +20,12 @@
  * @package    theme_littlemore
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Jago Brown <jago@active-studio.com>
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2014051200;
+$plugin->version   = 2014051201;
 $plugin->requires  = 2014050800;
 $plugin->component = 'theme_littlemore';
 $plugin->dependencies = array(

@@ -16,6 +16,26 @@ a.logo {
     float: right;
 }
 
+a.brand {
+   /* background: url([[setting:brand]]) no-repeat 0 0;*/
+    display: block;
+    float: left;
+    height: 16px;
+    margin: 5px 0 0 40px;
+    width: 20px;
+}
+
+a#brandimgset{
+	background: url([[setting:brand]]) no-repeat 0 0;
+	
+}
+
+.dir-rtl a.brand {
+    background: url([[setting:brand]]) no-repeat 100% 0;
+    display: block;
+    float: right;
+}
+
 /* Custom CSS Settings
 -------------------------*/
 [[setting:customcss]]

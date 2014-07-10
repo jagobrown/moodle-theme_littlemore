@@ -29,6 +29,7 @@
  * @package    theme_littlemore
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Jago Brown <jago@active-studio.com>
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -149,6 +150,14 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $settings->add($setting);
 
+    // Brand file setting. Added by Jago
+    $name = 'theme_littlemore/brand';
+    $title = get_string('brand','theme_littlemore');
+    $description = get_string('branddesc', 'theme_littlemore');
+    $setting = new admin_setting_configstoredfile($name, $title, $description, 'brand');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $settings->add($setting);
+    
     // Custom CSS file.
     $name = 'theme_littlemore/customcss';
     $title = get_string('customcss', 'theme_littlemore');

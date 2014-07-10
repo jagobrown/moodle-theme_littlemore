@@ -20,6 +20,7 @@
  * @package    theme_littlemore
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Jago Brown <jago@active-studio.com>
  */
 
 $string['backgroundfixed'] = 'Background fixed';
@@ -77,3 +78,11 @@ $string['secondarybackground_desc'] = 'The background colour of any secondary co
 $string['textcolor'] = 'Text colour';
 $string['textcolor_desc'] = 'The colour of the text.';
 
+$string['brand'] = 'Brand';
+$string['branddesc'] = 'Please upload your custom brand here if you want to add it to the header.<br>
+		Note: this Brand image is actually located where you might expect the logo image above - the top left corner. Additionally this image is a link to the users profile page.
+If the height of your logo is more than 75px add the following CSS rule to the Custom CSS box below.<br>
+a.logo {height: 100px;} or whatever height in pixels the logo is.';
+
+$string['brandhome'] = 'Links to your home page with a list of your courses';
+$string['brandhometext'] = 'My courses';
